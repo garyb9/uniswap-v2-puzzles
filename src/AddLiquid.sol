@@ -2,6 +2,7 @@
 pragma solidity ^0.8.13;
 
 import "./interfaces/IUniswapV2Pair.sol";
+import "./interfaces/IERC20.sol";
 
 contract AddLiquid {
     /**
@@ -12,14 +13,33 @@ contract AddLiquid {
      *  The challenge is to provide the same ratio as the pool then call the mint function in the pool contract.
      *
      */
+    event LogRatio(uint256 ratio);
+
+    function balanceOfToken(address token) internal view returns (uint256) {
+        return IERC20(token).balanceOf(address(this));
+    }
+
+    function sendTokens(address token, address recipient, uint256 amount) internal {
+        IERC20(token).transfer(recipient, amount);
+    }
+
     function addLiquidity(address usdc, address weth, address pool, uint256 usdcReserve, uint256 wethReserve) public {
         IUniswapV2Pair pair = IUniswapV2Pair(pool);
 
-        // your code start here
+        uint256 usdcBalance = balanceOfToken(usdc);
+        uint256 wethBalance = balanceOfToken(weth);
 
-        // see available functions here: https://github.com/Uniswap/v2-core/blob/master/contracts/interfaces/IUniswapV2Pair.sol
+        uint256 usdcRatio = usdcBalance / usdcReserve;
+        uint256 wethRatio = wethBalance / wethReserve;
 
-        // pair.getReserves();
-        // pair.mint(...);
+        if (usdcRatio < wethRatio) {
+            sendTokens(usdc, pool, usdcBalance);
+            sendTokens(weth, pool, wethBalance * wethReserve / usdcReserve);
+        } else {
+            sendTokens(weth, pool, wethBalance);
+            sendTokens(usdc, pool, usdcBalance * usdcReserve / wethReserve);
+        }
+
+        pair.mint(msg.sender);
     }
 }
