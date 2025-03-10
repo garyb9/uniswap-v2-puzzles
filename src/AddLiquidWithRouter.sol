@@ -28,14 +28,7 @@ contract AddLiquidWithRouter {
         uint256 usdcBalance = balanceOfToken(usdcAddress);
         uint256 ethBalance = address(this).balance;
 
-        routerInterface.addLiquidityETH(
-            usdcAddress, 
-            usdcBalance, 
-            usdcBalance, 
-            ethBalance, 
-            msg.sender, 
-            deadline
-        );
+        routerInterface.addLiquidityETH(usdcAddress, usdcBalance, usdcBalance, ethBalance, msg.sender, deadline);
     }
 
     receive() external payable {}

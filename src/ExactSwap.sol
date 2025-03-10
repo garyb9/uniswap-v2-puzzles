@@ -13,7 +13,7 @@ contract ExactSwap {
      *  from USDC/WETH pool.
      *
      */
-    function performExactSwap(address pool, address weth, address usdc) public {
+    function performExactSwap(address pool, address weth) public {
         /**
          *     swap(uint256 amount0Out, uint256 amount1Out, address to, bytes calldata data);
          *
@@ -22,7 +22,16 @@ contract ExactSwap {
          *     to: recipient address to receive the USDC tokens.
          *     data: leave it empty.
          */
+        IUniswapV2Pair pair = IUniswapV2Pair(pool);
+        (uint256 usdcReserve, uint256 wethReserve,) = pair.getReserves();
+        uint256 usdcAmount = 1337e6;
+        uint256 wethBalance = IERC20(weth).balanceOf(address(this));
+        uint256 wethToSwap = 1 + (wethReserve * usdcAmount * 1000) / ((usdcReserve - usdcAmount) * 997);
+        require(wethBalance >= wethToSwap, "Insufficient funds");
 
-        // your code start here
+        IERC20(weth).transfer(pool, wethToSwap);
+
+        // uint256 amount1Out = (amount0Out * wethReserve) / usdcReserve;
+        pair.swap(usdcAmount, 0, address(this), "");
     }
 }

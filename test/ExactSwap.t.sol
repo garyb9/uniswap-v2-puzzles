@@ -24,7 +24,7 @@ contract ExactSwapTest is Test {
         (uint256 r0, uint256 r1,) = IUniswapV2Pair(pool).getReserves();
 
         vm.prank(address(0xb0b));
-        exactSwap.performExactSwap(pool, weth, usdc);
+        exactSwap.performExactSwap(pool, weth);
 
         uint256 foo = (1 ether) - (IUniswapV2Pair(weth).balanceOf(address(exactSwap)));
 

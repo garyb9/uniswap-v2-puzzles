@@ -22,20 +22,11 @@ contract BurnLiquidWithRouter {
         return IERC20(token).balanceOf(address(this));
     }
 
-
     function burnLiquidityWithRouter(address pool, address usdc, address weth, uint256 deadline) public {
         IUniswapV2Router routerInterface = IUniswapV2Router(router);
         uint256 lpBalance = IERC20(pool).balanceOf(address(this));
         IERC20(pool).approve(router, lpBalance);
-        routerInterface.removeLiquidity(
-            usdc, 
-            weth,
-            lpBalance,
-            0, 
-            0, 
-            address(this), 
-            deadline
-        );
+        routerInterface.removeLiquidity(usdc, weth, lpBalance, 0, 0, address(this), deadline);
     }
 }
 
