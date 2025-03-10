@@ -11,8 +11,9 @@ contract HelloWorldTest is Test {
         helloWorld = new HelloWorld();
     }
 
-    function test_SayHelloWorld() public {
-        string memory greetings = helloWorld.sayHelloWorld(0x3e4B43D8bF9d69d2f142c39575fAD96E67c8Dc05);
+    function test_SayHelloWorld() public view {
+        // string memory greetings = helloWorld.sayHelloWorld(0x3e4B43D8bF9d69d2f142c39575fAD96E67c8Dc05);
+        string memory greetings = helloWorld.sayHelloWorld();
 
         require(keccak256(abi.encodePacked(greetings)) == keccak256(abi.encodePacked("Hello World")));
     }

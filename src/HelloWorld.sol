@@ -10,7 +10,7 @@ contract HelloWorld {
      *  The contract returns Hello World string.
      *
      */
-    function sayHelloWorld(address token) public returns (string memory) {
+    function sayHelloWorld() public pure returns (string memory) {
         return "Hello World";
     }
 }

@@ -13,8 +13,6 @@ contract AddLiquid {
      *  The challenge is to provide the same ratio as the pool then call the mint function in the pool contract.
      *
      */
-    event LogRatio(uint256 ratio);
-
     function balanceOfToken(address token) internal view returns (uint256) {
         return IERC20(token).balanceOf(address(this));
     }
